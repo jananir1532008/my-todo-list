@@ -3,12 +3,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const taskInput = document.getElementById("taskInput");
     const taskList = document.getElementById("taskList");
 
-    // Adhukkappuram unga render() function...
+    // Add task function
+    window.addTask = () => {
+        const taskValue = taskInput.value;
+        if (taskValue === "") {
+            alert("Please enter a task!");
+            return;
+        }
+
+        tasks.push(taskValue);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+        taskInput.value = "";
+        render();
+    };
+
+    // Render function
     function render() {
         taskList.innerHTML = "";
-        // ... baki code ...
+        tasks.forEach((task, index) => {
+            const li = document.createElement("li");
+            li.textContent = task + " "; 
+
+            // Delete button
+            const deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.onclick = () => {
+                tasks.splice(index, 1);
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+                render();
+            };
+
+            li.appendChild(deleteBtn);
+            taskList.appendChild(li);
+        });
     }
 
-    // Ellaa functions-um indha block-kulle irukkanum
-     render(); 
+    render();
 });
